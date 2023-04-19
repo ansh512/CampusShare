@@ -14,8 +14,8 @@ Rating system: After a transaction is completed, users can rate each other based
 # Installation
 1. Clone the repository from GitHub:
 2. Install dependencies for both server and client:
-3.Set environment variables:
-4.Start the server and client:
+3. Set environment variables:
+4. Start the server and client:
 
 The server will be running on http://localhost:5000 and the client will be running on http://localhost:3000
 
