@@ -1,0 +1,79 @@
+GET http://localhost:3000/posts 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW51YmhhdiIsImlhdCI6MTY4NjM5NDUwMywiZXhwIjoxNjg2Mzk0NTE4fQ.qY2MT9SfD_kw-NNyANI-6KBXq3FTI34sdICXXQxt0NA
+###
+DELETE http://localhost:3000/logout 
+Content-Type: application/json
+
+{
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW51YmhhdiIsImlhdCI6MTY4NjM5NDUwMywiZXhwIjoxNjg2Mzk0NTE4fQ.qY2MT9SfD_kw-NNyANI-6KBXq3FTI34sdICXXQxt0NA"
+}
+
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email":"abc@tezu.ac.in",
+    "password": "12345"
+}
+
+###
+
+POST http://localhost:3000/token 
+Content-Type: application/json
+
+{
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW51YmhhdiIsImlhdCI6MTY4NjM5NDQ3Mn0.gN019Ig1QsbiRh2KLvLMyAo-cNxhn0gKralJoWrl5iM"
+}
+
+###
+POST http://localhost:3000/sell
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW51YmhhdiIsImlhdCI6MTY4NjM5NDUwMywiZXhwIjoxNjg2Mzk0NTE4fQ.qY2MT9SfD_kw-NNyANI-6KBXq3FTI34sdICXXQxt0NA
+Content-Type: application/json
+
+{
+    "title": "machcity cylce",
+    "description": "black;in good condition",
+    "price": "3000"
+}
+
+###
+POST http://localhost:5000/register
+Content-Type: application/json
+
+{
+  "username": "Navin Kumar",
+  "email": "csb20064@tezu.ac.in",
+  "password": "1234",
+  "cpassword": "1234",
+  "phone": "9142026363"
+}
+
+###
+POST http://localhost:3000/forgotPassword
+Content-Type: application/json
+
+{
+    "email": "csb20057@tezu.ac.in"
+}
+
+###
+PUT http://localhost:3000/forgotPassword/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NDg4N2Q2NDY3OTk2M2JmYTcwZTA3ZjciLCJpYXQiOjE2ODY3MzM0NTF9.i2i8j3H657vNtuBKFUNYH4ELDoLb103RFdT9Xd6txfA
+Content-Type: application/json
+
+{
+    "password": "12345"
+}
+
+###
+PUT http://localhost:3000/buy
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW51YmhhdiIsImlhdCI6MTY4Njc0NzQxMCwiZXhwIjoxNjg2NzQ3NDI1fQ.WjlXfngM-s5VNsq2DP-6fmxFK_IcpDiFy7XERDNQqF4
+Content-Type: application/json
+
+{
+    "bid": "3500",
+    "remark": "its negotiable",
+}
+
+###
