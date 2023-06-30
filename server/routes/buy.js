@@ -7,6 +7,8 @@ const authPath = path.join(__dirname, "..", "middleware","auth.js")
 const auth = require(authPath);
 const userModelPath = path.join(__dirname, "..", "userModels", "userModel1.js");
 const User = require(userModelPath);
+const bidModelPath = path.join(__dirname, "..", "userModels", "bidModel.js");
+const Bid = require(bidModelPath);
 
 
 router.get("/", async (req, res) => {
@@ -24,20 +26,15 @@ router.put("/bid", auth, async (req, res) => {
     // console.log(req.body);
     const { itemID, amount, remark } = req.body;
     const userEmail = req.user; 
-
-    const newBid = {
+    const newBid = new Bid({
+      user:userEmail,
       itemID: itemID,
       amount: amount,
       remark: remark,
       accepted: "pending"
-    };
+    });
 
-    const user = await User.findOne({email:req.user});
-    if(user){
-      user.bid = [newBid];
-      await user.save();
-      console.log('Bid updated successfully!');
-    } 
+    await newBid.save();
     return res.status(200).json({ message: 'Bid updated successfully!' });
   } catch (error) {
     console.error('Error:', error);
@@ -47,11 +44,11 @@ router.put("/bid", auth, async (req, res) => {
 
 router.get("/history", auth, async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user });
+    const items = await Bid.find({ user: req.user });
     let tempItem = [];
 
-    for (let i = 0; i < user.bid.length; i++) {
-      const bidItem = await Item.findById(user.bid[i].itemID);
+    for (let i = 0; i < items.length; i++) {
+      const bidItem = await Item.findById(items[i].itemID);
       tempItem.push(bidItem);
     }
     res.status(200).json(tempItem);
@@ -60,7 +57,6 @@ router.get("/history", auth, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
 
 
 module.exports = router;

@@ -31,15 +31,7 @@ const userSchema = new mongoose.Schema({
   refreshToken: {
     token: { type: String },
     expiresAt: { type: Date }
-  },  
-  bid: [
-    {
-      itemID:{type:String},
-      amount: { type: Number },
-      remark: { type: String },
-      accepted: { type: String }
-    }
-  ]
+  }
 });
 
 module.exports = mongoose.model('User', userSchema);

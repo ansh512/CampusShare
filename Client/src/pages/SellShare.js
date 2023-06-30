@@ -1,14 +1,13 @@
-import React, { useState,useEffect } from 'react';
-import '../SellShare.css';
+import React, { useState} from 'react';
+import '../css/SellShare.css';
 import axios from 'axios';
-import Item from "./item"
 
 export default function SellShare() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
-  const[items,setItems] = useState([]);
+
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -26,21 +25,6 @@ export default function SellShare() {
     const selectedFile = Array.from(event.target.files);
     setSelectedImages(selectedFile);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/sell/myListing');
-        const itemsData = await response.json();
-        setItems(itemsData);
-        console.log(itemsData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -72,12 +56,12 @@ export default function SellShare() {
     setSelectedImages([]);
   };
   
-
   return (
-    <div className="sell-share-container">
-      <h1>SellShare</h1>
-      <hr />
-      <form onSubmit={handleSubmit}>
+    <>
+    <h1>Sell/Share</h1>
+      <hr/>
+      <div className="sell-share-container">
+      <form  onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="title">Title:</label>
           <input
@@ -122,13 +106,7 @@ export default function SellShare() {
         </div>
         <input type="submit" value="Upload" className="submit-button" />
       </form>
-      <h1>My Listing</h1>
-      <hr/>
-      {items.map(item => (
-        <div key={item._id}>
-          <Item {...item} showButton={false}/>
-        </div>
-      ))}
-    </div>
+      </div>
+   </>
   );
 }

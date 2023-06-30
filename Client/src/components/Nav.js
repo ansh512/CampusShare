@@ -17,6 +17,9 @@ function Navbar(props) {
           <Link to="/SellShare">Sell/Share</Link>
         </li>
         <li>
+          <Link to="/MyListing">My Listing</Link>
+        </li>
+        <li>
           <Link to="/History">History</Link>
         </li>
         {isLoggedIn ? (

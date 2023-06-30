@@ -1,9 +1,8 @@
-import Item from "./item"
-import Popup from "./pop";
+import Item from "../components/item";
+import Popup from "../components/pop";
 import React, { useEffect, useState } from 'react';
 
 export default function BuyBorrow(props) {
-
   const [items, setItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedItem, setSelectedItem] = useState('');
@@ -13,7 +12,16 @@ export default function BuyBorrow(props) {
       try {
         const response = await fetch('/buy');
         const itemsData = await response.json();
-        setItems(itemsData);
+        
+        const updatedItemsData = itemsData.map(item => {
+          if (item.images && item.images.length > 0) {
+            const images = item.images.map(image => `http://localhost:5000/uploads/${image}`);
+            return { ...item, images };
+          }
+          return item;
+        });
+        
+        setItems(updatedItemsData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -32,20 +40,14 @@ export default function BuyBorrow(props) {
     setShowPopup(false);
   };
 
-  // const handleClaim = () => {
-  //   if (selectedItem) {
-  //     props.onClaim(selectedItem);
-  //     setShowPopup(false);
-  //   }
-  // };
-
   return (
     <div>
       <h1>Borrow</h1>
       <hr/>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
       {items.map(item => (
         <div key={item._id}>
-          <Item {...item} onClick={() => handleClick(item)} showButton={true} />
+          <Item {...item} onClick={() => handleClick(item)} buttonText={"Make an Offer"} images={item.images} />
           {showPopup && selectedItem && selectedItem._id === item._id && (
             <Popup
               item={selectedItem}
@@ -54,6 +56,7 @@ export default function BuyBorrow(props) {
           )}
         </div>
       ))}
+      </div>
     </div>
   );
 }

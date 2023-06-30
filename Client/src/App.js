@@ -2,9 +2,10 @@ import './App.css';
 import Login from "./components/login"
 import React, { useState,useEffect} from 'react';
 import Navbar from "./components/Nav"
-import BuyBorrow from "./components/BuyBorrow"
-import History from "./components/History"
-import SellShare from "./components/SellShare"
+import BuyBorrow from "./pages/BuyBorrow"
+import Listing from "./pages/MyListing"
+import History from "./pages/History"
+import SellShare from "./pages/SellShare"
 import ForgotPassword from './components/forgotPassword';
 import Register from './components/register';
 import axios from 'axios';
@@ -53,6 +54,14 @@ function App() {
           element={
             <PrivateRoute isLoggedIn={isLoggedIn}>
               <SellShare />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/MyListing"
+          element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <Listing />
             </PrivateRoute>
           }
         />

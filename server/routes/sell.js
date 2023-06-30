@@ -8,6 +8,9 @@ const Item = require(itemModelPath);
 const userModelPath = path.join(__dirname, '..', 'userModels', 'userModel1.js');
 const User = require(userModelPath);
 const auth = require('./../middleware/auth.js');
+const bidModelPath = path.join(__dirname, "..", "userModels", "bidModel.js");
+const Bid = require(bidModelPath);
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -27,7 +30,6 @@ router.post('/', auth, upload.array('images', 5), async (req, res) => {
   try {
     const { title, description, price } = req.body;
     const images = req.files.map((file) => file.filename);
-    console.log(images);
 
     const newItem = new Item({
       user: req.user,
@@ -37,7 +39,7 @@ router.post('/', auth, upload.array('images', 5), async (req, res) => {
       images: images,
     });
 
-    await newItem.save(); // Save the newItem document
+    await newItem.save();
 
     res.status(200).json({ message: 'Item registered successfully!' });
   } catch (error) {
@@ -46,23 +48,36 @@ router.post('/', auth, upload.array('images', 5), async (req, res) => {
   }
 });
 
-router.get("/myListing", auth, async (req, res) => {
+router.get("/offers/:id", auth, async (req, res) => {
   try {
-    const items = await Item.find({ user: req.user });
+    const offer = await Bid.find({ itemID: req.params.id });
 
-    for (let i = 0; i < items.length; i++) {
-      const bids = await User.find({ "bid.itemID": items[i]._id });
-      console.log(bids[0]);
-      if (bids.length > 0) {
-        items[i]["bid"] = bids;
-      }
-    }
-    
-    res.status(200).json(items);
+    res.status(200).json({ offer: offer });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while getting the item.' });
+    res.status(500).json({ error: 'An error occurred while getting the items.' });
   }
 });
 
+router.get("/myListing", auth, async (req, res) => {
+  try{
+
+    const items = await Item.find({ user: req.user });
+    res.status(200).json({ items: items});
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while getting the offers.' });
+  }
+})
+
+router.post("/accept/:id", auth, async (req, res) => {
+  try{
+    const bid = await Bid.findByIdAndUpdate(req.params._id,{accepted : true});
+    
+  }catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
 module.exports = router;

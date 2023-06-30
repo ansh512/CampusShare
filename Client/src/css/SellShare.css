@@ -1,10 +1,12 @@
 .sell-share-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
+    margin-top: 100px;
+    margin-left:500px;
+    max-width: 450px;
+    padding: 30px;
     background-color: #F8F8F8;
     border: 1px solid #DDDDDD;
     border-radius: 5px;
+    align-items: center;
   }
   
   .form-group {
