@@ -72,12 +72,14 @@ router.get("/myListing", auth, async (req, res) => {
 })
 
 router.post("/accept/:id", auth, async (req, res) => {
-  try{
-    const bid = await Bid.findByIdAndUpdate(req.params._id,{accepted : true});
-    
-  }catch (error) {
+  try {
+    const bid = await Bid.findByIdAndUpdate(req.params.id, { accepted: true });
+    await Sell.findByIdAndUpdate({ _id: bid.itemID }, { status: "sold" });
+    res.status(200).json({ message: "Bid accepted successfully." });
+  } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error.' });
+    res.status(500).json({ error: "Internal server error." });
   }
 });
+
 module.exports = router;

@@ -1,4 +1,5 @@
 import React, { useState} from 'react';
+import { Button, Label, TextInput,FileInput} from 'flowbite-react';
 import '../css/SellShare.css';
 import axios from 'axios';
 
@@ -57,56 +58,77 @@ export default function SellShare() {
   };
   
   return (
-    <>
-    <h1>Sell/Share</h1>
-      <hr/>
-      <div className="sell-share-container">
-      <form  onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="title">Title:</label>
-          <input
-            required
-            name="title"
-            type="text"
-            className="input-field"
-            value={title}
-            onChange={handleTitleChange}
+      <div class="flex items-center justify-center h-screen">
+      <form className="flex max-w-md flex-col gap-4 bg-slate-300 p-8 -mt-8" onSubmit={handleSubmit}>
+      <h1 className='italic'>Fill in your product details:</h1>
+      <div>
+        <div className="mb-2 block">
+          <Label
+            htmlFor="title"
+            value="Product Title"
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="description">Description:</label>
-          <input
-            name="description"
-            type="text"
-            className="input-field"
-            value={description}
-            onChange={handleDescriptionChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="price">Price:</label>
-          <input
-            name="price"
-            type="number"
-            className="input-field"
-            value={price}
-            onChange={handlePriceChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="img">Upload image: </label>
-          <input
-            type="file"
-            name="images"
-            accept="image/*"
-            className="input-field"
-            onChange={handleimageChange}
-            multiple
-          />
-        </div>
-        <input type="submit" value="Upload" className="submit-button" />
-      </form>
+        <TextInput
+          id="title"
+          placeholder="name@gmail.com"
+          required
+          type="string"
+          value={title}
+          onChange={handleTitleChange}
+        />
       </div>
-   </>
+      <div>
+        <div className="mb-2 block">
+          <Label
+            htmlFor="description"
+            value="Product description"
+          />
+        </div>
+        <TextInput
+          id="description"
+          required
+          type="string"
+          value={description}
+          onChange={handleDescriptionChange}
+        />
+      </div>
+      <div>
+        <div className="mb-2 block">
+          <Label
+            htmlFor="price"
+            value="Expected Price"
+          />
+        </div>
+        <TextInput
+          id="price"
+          required
+          type="string"
+          value={price}
+          onChange={handlePriceChange}
+        />
+      </div>
+      <div
+        className="max-w-md"
+        id="fileUpload"
+      >
+        <div className="mb-2 block">
+          <Label
+            htmlFor="file"
+            value="Upload file"
+          />
+        </div>
+        <FileInput
+          helperText="A picture of your product increases your product sale chance by 90%."
+          id="file"
+          onChange={handleimageChange}
+          multiple
+          accept="image/*"
+        />
+    </div>
+      <Button type="submit">
+        Post
+      </Button>
+    </form>
+   </div>
   );
 }

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const PhoneNumber = require('libphonenumber-js');
 
 const userSchema = new mongoose.Schema({
   name: String,

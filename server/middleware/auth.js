@@ -7,14 +7,14 @@ app.use(cookieParser());
 async function authenticateToken(req, res, next) {
   try {
     const token = req.cookies.jwt;
-    console.log('Token:', token);
+    // console.log('Token:', token);
 
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    console.log('Decoded token:', decoded);
+    // console.log('Decoded token:', decoded);
 
     req.user = decoded.name;
     next();

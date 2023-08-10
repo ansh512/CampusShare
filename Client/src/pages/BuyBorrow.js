@@ -42,8 +42,6 @@ export default function BuyBorrow(props) {
 
   return (
     <div>
-      <h1>Borrow</h1>
-      <hr/>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
       {items.map(item => (
         <div key={item._id}>

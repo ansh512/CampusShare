@@ -1,7 +1,6 @@
-import './App.css';
 import Login from "./components/login"
 import React, { useState,useEffect} from 'react';
-import Navbar from "./components/Nav"
+import {Header as Navbar} from "./components/Nav"
 import BuyBorrow from "./pages/BuyBorrow"
 import Listing from "./pages/MyListing"
 import History from "./pages/History"
@@ -10,6 +9,7 @@ import ForgotPassword from './components/forgotPassword';
 import Register from './components/register';
 import axios from 'axios';
 import { Route, Routes , Navigate} from 'react-router-dom';
+
 
 
 function App() {
