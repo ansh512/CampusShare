@@ -6,10 +6,11 @@ import { Navbar } from 'flowbite-react';
 export function Header(props) {
 
   const isLoggedIn = props.isLoggedIn;
+  
   const handleLogout = props.handleLogout;
-  console.log(isLoggedIn);
 
   return (
+    
     <Navbar
       fluid
       rounded
@@ -33,10 +34,8 @@ export function Header(props) {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link
-          active
-        >
-          <Link to="/">Buy</Link>
+        <Navbar.Link>
+          <Link to="/" >Buy</Link>
         </Navbar.Link>
         <Navbar.Link>
           <Link to="/SellShare">Sell</Link>

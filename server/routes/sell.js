@@ -50,14 +50,23 @@ router.post('/', auth, upload.array('images', 5), async (req, res) => {
 
 router.get("/offers/:id", auth, async (req, res) => {
   try {
-    const offer = await Bid.find({ itemID: req.params.id });
+    const itemId = req.params.id;
 
+    if (!itemId) {
+      return res.status(400).json({ error: 'Invalid itemID' });
+    }
+
+    
+
+    const offer = await Bid.find({ itemID: itemId });
+    console.log(offer);
     res.status(200).json({ offer: offer });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while getting the items.' });
   }
 });
+
 
 router.get("/myListing", auth, async (req, res) => {
   try{

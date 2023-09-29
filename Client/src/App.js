@@ -47,7 +47,7 @@ function App() {
     <>
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<BuyBorrow />} />
+        <Route path="/" element={<BuyBorrow isLoggedIn={isLoggedIn}/>} />
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
         <Route
           path="/SellShare"

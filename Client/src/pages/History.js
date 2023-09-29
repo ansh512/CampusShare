@@ -1,26 +1,10 @@
-import Item from "../components/item"
 import React, { useEffect, useState } from 'react';
-import '../css/button.css'
+import { Table } from 'flowbite-react';
+import Jumbotron from "../components/jumbotron";
 
-export default function History(props) {
+export default function History() {
 
   const[claimedItems, setClaimedItems] = useState([])
-  
-    const [isOpen1, setIsOpen1] = useState(false);
-    const [isOpen2, setIsOpen2] = useState(false);
-    const [isOpen3, setIsOpen3] = useState(false);
-  
-    const togglePanel1 = () => {
-      setIsOpen1(!isOpen1);
-    };
-  
-    const togglePanel2 = () => {
-      setIsOpen2(!isOpen2);
-    };
-  
-    const togglePanel3 = () => {
-      setIsOpen3(!isOpen3);
-    };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,34 +27,47 @@ export default function History(props) {
   }, []);
     
     return (
-      <div>
-        <h1 style={{margin:'10px'}}>History</h1>
-        <hr/>
-          <div className='card text' style={{color:'blue'}}   onClick={togglePanel1}>Pending Offers</div>
-          {isOpen1 && (
-            <div className={`panel ${isOpen1 ? 'open' : ''}`}>
-            {claimedItems.map((item) => (
-              <Item key={item._id} {...item} showButton={false}/>
-            ))}
-            </div>
-          )}
-          <div className='card text' style={{color:'green'}}  onClick={togglePanel2}>Accpted Offers</div>
-          {isOpen2 && (
-            <div className={`panel ${isOpen2 ? 'open' : ''}`}>
-            {claimedItems.map((item) => (
-              <Item key={item._id} {...item} showButton={false}/>
-            ))}
-            </div>
-          )}
-          <div className='card text' style={{color:'red'}} onClick={togglePanel3}>Rejected Offers</div>
-          {isOpen3 && (
-            <div className={`panel ${isOpen3 ? 'open' : ''}`}>
-            {claimedItems.map((item) => (
-              <Item key={item._id} {...item} showButton={false}/>
-            ))}
-            </div>
-          )}
-          </div>
-          
+      <div className="m-16">
+        {claimedItems.length > 0 ? (
+          <Table hoverable>
+            <Table.Head>
+              <Table.HeadCell>Product name</Table.HeadCell>
+              <Table.HeadCell>Description</Table.HeadCell>
+              <Table.HeadCell>Price</Table.HeadCell>
+              <Table.HeadCell>Offer</Table.HeadCell>
+              <Table.HeadCell>Bid Status</Table.HeadCell>
+              <Table.HeadCell>
+                <span className="sr-only">See</span>
+              </Table.HeadCell>
+            </Table.Head>
+            <Table.Body>
+              {claimedItems.map((item, index) => (
+                <Table.Row
+                  key={index}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    {item.title}
+                  </Table.Cell>
+                  <Table.Cell>{item.description}</Table.Cell>
+                  <Table.Cell>{item.price}</Table.Cell>
+                  <Table.Cell>{item.offer}</Table.Cell>
+                  <Table.Cell>{item.bidStatus}</Table.Cell>
+                  <Table.Cell>
+                    <a
+                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                      href="/tables"
+                    >
+                      See
+                    </a>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        ) : (
+          <Jumbotron />
+        )}
+      </div>
     );
   }

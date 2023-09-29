@@ -23,40 +23,61 @@ router.get("/", async (req, res) => {
 
 router.put("/bid", auth, async (req, res) => {
   try {
-    // console.log(req.body);
     const { itemID, amount, remark } = req.body;
     const userEmail = req.user; 
-    const newBid = new Bid({
-      user:userEmail,
-      itemID: itemID,
-      amount: amount,
-      remark: remark,
-      accepted: "pending"
-    });
+    const item = await Item.findOne({ _id: itemID });
+    const bidCheck = await Bid.findOne({ $and: [{ itemID: itemID }, { user: req.user }] });
+    console.log(item.user,req.user)
+    if (item.user === req.user) {
+      return res.status(403).json({ message: 'You cannot bid on your own product' });
+    }
 
-    await newBid.save();
-    return res.status(200).json({ message: 'Bid updated successfully!' });
+    if (bidCheck !== null) {
+      await Bid.updateOne({ _id: bidCheck._id }, { amount: amount, remark: remark });
+      return res.status(200).json({ message: 'Your bid was updated successfully!' });
+    } else {
+      const newBid = new Bid({
+        user: userEmail,
+        itemID: itemID,
+        amount: amount,
+        remark: remark,
+        accepted: "pending"
+      });
+      await newBid.save();
+    }
+
+    return res.status(200).json({ message: 'Bid placed successfully!' });
   } catch (error) {
-    console.error('Error:', error);
     return res.status(500).json({ message: 'An error occurred while updating the bid.' });
   }
 });
 
+
 router.get("/history", auth, async (req, res) => {
   try {
-    const items = await Bid.find({ user: req.user });
-    let tempItem = [];
+    const bids = await Bid.find({ user: req.user });
+    const tempItems = [];
 
-    for (let i = 0; i < items.length; i++) {
-      const bidItem = await Item.findById(items[i].itemID);
-      tempItem.push(bidItem);
+    for (let i = 0; i < bids.length; i++) {
+      const bid = bids[i];
+      const item = await Item.findById(bid.itemID);
+
+      const itemWithBid = {
+        ...item.toObject(),
+        offer: bid.amount,
+        bidStatus:bid.accepted
+      };
+
+      tempItems.push(itemWithBid);
     }
-    res.status(200).json(tempItem);
+
+    res.status(200).json(tempItems);
   } catch (error) {
     console.error("An error occurred while getting items:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 
 module.exports = router;

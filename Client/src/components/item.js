@@ -1,35 +1,42 @@
-import styles from "../css/item.module.css"
-//import ImageSlider from "./imgSlider";
+import React, { useState } from 'react';
+import {Card,Button } from 'flowbite-react';
+import ProductDetails from './pop.js'
+import { useNavigate } from 'react-router-dom';
+import { usePrice } from '../context/PriceContext';
 
 function Item(props){
+  const navigate = useNavigate(); 
+  const { formatPrice } = usePrice();
+  const price = props.price;
+  const [openModal, setOpenModal] = useState();
+  const prop = { openModal, setOpenModal };
 
-  const handleClick = () => {
-    props.onClick();
-  };
+  return (
+    <div >
+      <Card className='hover:bg-gray-200 hover:cursor-pointer'>
+        <img 
+          src={props.images[0]} 
+          className='h-52 object-cover'
+          alt="Your Alt Text"
+        />
+      
+        <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          <p>
+            {props.title}
+          </p>
+        </h5>
 
-    return (
-<>
-<div className={styles.container}>
-      <div className={styles.images}>
-        <img className={styles.img} alt="product img" src="http://mistillas.cl/wp-content/uploads/2018/04/Nike-Epic-React-Flyknit-%E2%80%9CPearl-Pink%E2%80%9D-01.jpg" />
-      </div>
-      <div className={styles.product}>
-        <h1 className={styles.h1}>{props.title}</h1>
-        <h2 className={styles.h2}>₹ {props.price}</h2>
-        <p className={styles.desc}>
-         {props.description}
-        </p>
-        <div className={styles.buttons}>
-          <button className={`${styles.add} ${styles.button}`} onClick={handleClick}>{props.buttonText}</button>
-          <button className={`${styles.like} ${styles.button}`}>
-            <span>♥</span>
-          </button>
+        <div className="flex items-center justify-between">
+          <span className="text-3xl text-gray-900 dark:text-white">
+            {formatPrice(price)}
+          </span>
+          <Button onClick={() => props.isLoggedIn ? setOpenModal('dismissible') : navigate('/login')}>Make an Offer</Button>
+          <ProductDetails open = {prop.openModal} close= {prop.setOpenModal} item={props}/>
         </div>
-      </div>
+      </Card>
     </div>
-</>
 
-    );
+  );
 }
 
 export default Item;

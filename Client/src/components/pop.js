@@ -1,72 +1,74 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Modal, Label, Textarea, TextInput,Button } from 'flowbite-react';
+import Carousel from './carousel';
 
-function Popup({ onClose,item }) {
-
-  const [showPopup, setShowPopup] = useState(true);
-
-  const[amount, setAmount] = useState('');
-  const[remark, setRemark] = useState('');
+function ProductDetails({ item, open, close }) {
+  const [amount, setAmount] = useState('');
+  const [remark, setRemark] = useState('');
 
   async function handleClaim(event) {
     event.preventDefault();
     try {
-      await axios.put('buy/bid', {itemID:item._id, amount: amount, remark: remark });
-      alert('Thank you! Your bid has been submitted!');
-     
+      const response = await axios.put('buy/bid', { itemID: item._id, amount: amount, remark: remark });
+      alert(response.data.message); 
     } catch (error) {
-      console.log(error);
-      alert(error.response);
+      alert(error.response.data.message); 
     }
   }
+  
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
+  };
 
-  const handlePopupClose = () => {
-    if (onClose) {
-      onClose();
-    }
-    setShowPopup(false);
+  const handleRemarkChange = (event) => {
+    setRemark(event.target.value);
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 1
-    }}>
-      <div style={{ display: showPopup ? 'block' : 'none', backgroundColor: 'white', padding: '20px' }}>
-        <form onSubmit={handleClaim}>
-          <label htmlFor="offer">Your Offer</label>
-          <input type="number" 
-            name="offer" 
-            plcaeholder="Enter amount"
-            style={{ marginBottom: '10px', padding: '5px', width: '100%' }} 
-            onChange={(e) => setAmount(e.target.value)}
-          />
-          <br/>
-          <label htmlFor="reamrk ">Remark:</label>
-          <textarea name="remark" 
-            rows={5} cols={10} 
-            style={{ marginBottom: '10px', padding: '5px', width: '100%' }}
-            onChange={(e) => setRemark(e.target.value)}>
-          </textarea>
-          <br/>
-          <button 
-            onClick={handlePopupClose} 
-            style={{ marginRight: '10px' }}>
-            Cancel
-          </button>
-          <button onClick={handleClaim}>Submit</button>
-        </form>
-      </div>
-    </div>
+    <>
+      <Modal dismissible show={open === 'dismissible'} onClose={() => close(undefined)} >
+        <Modal.Header>
+          {item.title}
+          <p className='italic text-base font-light'>{item.description}</p>
+        </Modal.Header>
+        <Modal.Body className='flex flex-col gap-4 ' >
+        <Carousel images={item.images} />
+          <div>
+            <div className="mb-2 block">
+              <Label color="gray" htmlFor="input-gray" value="Your bid" />
+            </div>
+            <TextInput
+              color="gray"
+              id="input-gray"
+              placeholder="Amount offered"
+              required
+              value={amount}
+              onChange={handleAmountChange} 
+            />
+            <div className="max-w-md" id="textarea">
+              <div className="mb-2 block">
+                <Label htmlFor="comment" value="Your message" />
+              </div>
+              <Textarea
+                id="comment"
+                placeholder="Leave a comment..."
+                required
+                rows={4}
+                value={remark} 
+                onChange={handleRemarkChange} 
+              />
+            </div>
+            <Button className="my-2" onClick={handleClaim}>
+              <p>
+                Place your BID
+              </p>
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
 
-export default Popup;
+export default ProductDetails;

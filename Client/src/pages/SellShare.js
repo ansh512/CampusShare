@@ -58,7 +58,7 @@ export default function SellShare() {
   };
   
   return (
-      <div class="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen">
       <form className="flex max-w-md flex-col gap-4 bg-slate-300 p-8 -mt-8" onSubmit={handleSubmit}>
       <h1 className='italic'>Fill in your product details:</h1>
       <div>

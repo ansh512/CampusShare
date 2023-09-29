@@ -1,11 +1,11 @@
 import Item from "../components/item";
-import Popup from "../components/pop";
 import React, { useEffect, useState } from 'react';
+import { TextInput,Button } from "flowbite-react";
 
-export default function BuyBorrow(props) {
+export default function BuyBorrow({isLoggedIn}) {
+
   const [items, setItems] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,31 +30,47 @@ export default function BuyBorrow(props) {
     fetchData();
   }, []);
 
-  const handleClick = (item) => {
-    console.log("Button pressed", item);
-    setSelectedItem(item);
-    setShowPopup(true);
-  };
-
-  const handlePopupClose = () => {
-    setShowPopup(false);
+  const handleSearch = () =>{
+    const filteredItems = items.filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    setItems(filteredItems);
   };
 
   return (
     <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-      {items.map(item => (
-        <div key={item._id}>
-          <Item {...item} onClick={() => handleClick(item)} buttonText={"Make an Offer"} images={item.images} />
-          {showPopup && selectedItem && selectedItem._id === item._id && (
-            <Popup
-              item={selectedItem}
-              onClose={handlePopupClose}
-            />
-          )}
-        </div>
-      ))}
+      <div className="flex flex-row gap-x-3 justify-center items-center m-2">
+
+        <TextInput
+          placeholder="Search"
+          required
+          type="text"
+          value={searchQuery}
+          className="w-full md:w-64 lg:w-96" 
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+        <Button 
+          onClick={handleSearch}
+          size="sm"
+          color="dark"
+        >
+          <p>
+            Search
+          </p>
+        </Button>
+
       </div>
+
+      {items.length === 0 ? (
+        <p className="text-center text-red-500">No product found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 m-16">
+          {items.map(item => (
+            <div key={item._id}>
+              <Item {...item} images={item.images} isLoggedIn={isLoggedIn} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
