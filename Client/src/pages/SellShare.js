@@ -39,8 +39,6 @@ export default function SellShare() {
     selectedImages.forEach((image, index) => {
       formData.append('images', image);
     });
-
-    console.log(FormData);
   
     axios
       .post('/sell', formData)

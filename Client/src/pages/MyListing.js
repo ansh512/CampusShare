@@ -27,7 +27,6 @@ export default function MyListing() {
           }
           return item;
         });
-        console.log(updatedItemsData);
         setItems(updatedItemsData);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -41,16 +40,15 @@ export default function MyListing() {
     try {
       const response = await fetch(`/sell/offers/${itemId}`);
       const responseData = await response.json();
-      console.log(responseData.offer)
       setOffers(responseData.offer);
     } catch (error) {
       console.error('Error fetching offers:', error);
     }
   };
   
-  const handleSell = (event) => {
-    const value = event.target.value;
-    fetch(`/sell/accept/${value}`, {
+  const handleSell = (itemID) => {
+    
+    fetch(`/sell/accept/${itemID}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -101,7 +99,7 @@ export default function MyListing() {
                 <Accordion.Panel key={index}>
                   <Accordion.Title className="flex flex-row justify-between">
                       <span>{offer.user} made an offer of {formatPrice(offer.amount)}.
-                    <Button className="inline bg-green-500 ml-8" color="success" pill onClick={() => props1.setOpenModal1('pop-up')}>Accept</Button></span>
+                    <Button className="inline bg-green-500 ml-8" color="success" pill onClick={() => {props1.setOpenModal1('pop-up');props1.offerId = offer._id;}}>Accept</Button></span>
                   </Accordion.Title>
                   <Accordion.Content>
                     <p className="mb-2 text-gray-500 dark:text-gray-400">
@@ -123,14 +121,17 @@ export default function MyListing() {
         <Modal.Body>
           <div className="text-center">
             <div className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <svg className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
               Are you sure you want to accept this offer?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleSell}>
-                Yes, I'm sure
-              </Button>
-              <Button color="gray" onClick={() => props.setOpenModal(undefined)}>
+            <Button color="failure" onClick={() => handleSell(props1.offerId)}>
+              Yes, I'm sure
+            </Button>
+              <Button color="gray" onClick={() => props1.setOpenModal1(undefined)}>
                 No, cancel
               </Button>
             </div>

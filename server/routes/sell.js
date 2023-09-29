@@ -82,7 +82,7 @@ router.get("/myListing", auth, async (req, res) => {
 
 router.post("/accept/:id", auth, async (req, res) => {
   try {
-    const bid = await Bid.findByIdAndUpdate(req.params.id, { accepted: true });
+    const bid = await Bid.findByIdAndUpdate(req.params.id, { accepted: accepted });
     await Sell.findByIdAndUpdate({ _id: bid.itemID }, { status: "sold" });
     res.status(200).json({ message: "Bid accepted successfully." });
   } catch (error) {
