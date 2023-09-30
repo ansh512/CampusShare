@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import { Card, Modal, Button, Accordion } from 'flowbite-react';
 import { usePrice } from '../context/PriceContext';
+import {BASE_URL} from "../services/helper";
+import Loading from "../components/Loader";
 
 export default function MyListing() {
 
@@ -12,6 +14,8 @@ export default function MyListing() {
   const props = { openModal, setOpenModal };
   const [openModal1, setOpenModal1] = useState();
   const props1 = { openModal1, setOpenModal1 };
+  const [isLoading, setIsLoading] = useState(true);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,14 +26,16 @@ export default function MyListing() {
         
         const updatedItemsData = itemsData.map(item => {
           if (item.images && item.images.length > 0) {
-            const images = item.images.map(image => `http://localhost:5000/uploads/${image}`);
+            const images = item.images.map(image => `${BASE_URL}/uploads/${image}`);
             return { ...item, images };
           }
           return item;
         });
         setItems(updatedItemsData);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setIsLoading(false); 
       }
     };
 
@@ -65,31 +71,41 @@ export default function MyListing() {
   
 
   return (
-    <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 m-16">
-        {items.map((item,index)=>(
-          <Card className='hover:bg-gray-200' key={index}>
-            <img 
-              src={item.images[0]} 
-              className='h-52 object-cover'
-              alt="Your Alt Text"
-            />
-          
-            <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-              <p>
-                {item.title}
-              </p>
-            </h5>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-3xl text-gray-900 dark:text-white">
-                {formatPrice(item.price)}
-              </span>
-              <Button onClick={() => { getOffer(item._id); props.setOpenModal('default'); }}>See Offers</Button>
-            </div>
-          </Card>
-        ))}
-      </div>
+    <div className='min-h-screen w-full'>
+      
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 m-16">
+          {items.map((item, index) => (
+            <Card className="hover:bg-gray-200" key={index}>
+              <img
+                src={item.images[0]}
+                className="h-52 object-cover"
+                alt="Your Alt Text"
+              />
+
+              <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                <p>{item.title}</p>
+              </h5>
+
+              <div className="flex items-center justify-between">
+                <span className="text-3xl text-gray-900 dark:text-white">
+                  {formatPrice(item.price)}
+                </span>
+                <Button
+                  onClick={() => {
+                    getOffer(item._id);
+                    props.setOpenModal('default');
+                  }}
+                >
+                  See Offers
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
       <Modal show={props.openModal === 'default'} onClose={() => props.setOpenModal(undefined)}>
         <Modal.Header>Offers</Modal.Header>
         <Modal.Body>
@@ -139,6 +155,6 @@ export default function MyListing() {
         </Modal.Body>
       </Modal>
       
-    </>
+    </div>
   )
 }

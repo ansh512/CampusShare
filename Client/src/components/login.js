@@ -21,9 +21,9 @@ function Login({setIsLoggedIn}){
     try {
       const response = await axios.post('/login', { email: user, password: pwd });
       localStorage.setItem('refreshToken', response.data.token);
+      localStorage.setItem('isLoggedIn', 'true');
       setIsLoggedIn(true);
       navigate('/');
-      console.log(response.data)
     } catch (error) {
       setErrorMessage(error.response.data.message);
     }

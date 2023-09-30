@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'flowbite-react';
 import Jumbotron from "../components/jumbotron";
+import {BASE_URL} from "../services/helper"
 
 export default function History() {
 
@@ -13,7 +14,7 @@ export default function History() {
         const itemsData = await response.json();
         const updatedItemsData = itemsData.map(item => {
           if (item.images && item.images.length > 0) {
-            const images = item.images.map(image => `http://localhost:5000/uploads/${image}`);
+            const images = item.images.map(image => `${BASE_URL}/uploads/${image}`);
             return { ...item, images };
           }
           return item;

@@ -18,6 +18,7 @@ function App() {
   const handleLogout = () => {
     alert("Are you sure you want to logout??")
     setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn');
   };
 
   const refreshAccessToken = async () => {
@@ -30,6 +31,9 @@ function App() {
   };
 
   useEffect(() => {
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(storedIsLoggedIn);
+
     if (isLoggedIn) {
       refreshAccessToken();
       const intervalId = setInterval(refreshAccessToken, 15 * 60 * 1000);
