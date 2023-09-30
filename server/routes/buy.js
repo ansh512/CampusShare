@@ -13,7 +13,7 @@ const Bid = require(bidModelPath);
 
 router.get("/", async (req, res) => {
   try {
-    const items = await Item.find({});
+    const items = await Item.find({status:"unsold"});
     res.status(200).json(items);
   } catch (error) {
     console.error("An error occurred while getting items:", error);

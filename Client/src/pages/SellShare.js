@@ -1,6 +1,5 @@
 import React, { useState} from 'react';
 import { Button, Label, TextInput,FileInput} from 'flowbite-react';
-import '../css/SellShare.css';
 import axios from 'axios';
 
 export default function SellShare() {

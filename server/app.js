@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const PORT = process.env.PORT || 5000;
 
 const path = require("path");
 const userModelPath = path.join(__dirname, "..","server", "userModels", "userModel1.js");
@@ -24,7 +25,7 @@ app.use('/uploads', express.static(__dirname+'/uploads'));
 app.use('/sell', sellRoute);
 app.use('/buy', buyRoute);
 
-mongoose.connect("mongodb+srv://user1:tjAevfZj2WTPI9SG@cluster0.iownvgj.mongodb.net/?retryWrites=true&w=majority", { useNewUrlParser: true ,useUnifiedTopology: true})
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true ,useUnifiedTopology: true})
   .then(() => {
     console.log("Connected to DB");
   })
@@ -235,6 +236,6 @@ app.delete('/logout', (req, res) => {
   res.sendStatus(204)
 })
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
     console.log("Server started on port 5000.");
   });
